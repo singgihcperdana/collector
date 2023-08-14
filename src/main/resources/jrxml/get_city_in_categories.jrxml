@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="get_city_in_categories" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="abceec42-d6c9-4c32-95ad-a30e1bb2fd55">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="335"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="654"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="dvdrental@devs.local"/>
+	<property name="ireport.jasperserver.url" value="http://devh1.sing123.xyz:8081/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/Reports/Samples/get_city_in_categories_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/Reports/Samples/get_city_in_categories"/>
+	<parameter name="P_CATEGORIES" class="java.lang.String"/>
+	<parameter name="query" class="java.lang.String">
+		<defaultValueExpression><![CDATA["select distinct f.film_id, f.title, c.name as category_name from film f inner join film_category fc on f.film_id = f.film_id inner join category c on c.category_id = fc.category_id where c.name IN ('"+$P{P_CATEGORIES}.replaceAll( ",", "','" )+"')"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[$P!{query}]]>
+	</queryString>
+	<field name="film_id" class="java.lang.String"/>
+	<field name="title" class="java.lang.String"/>
+	<field name="category_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="30" uuid="f1560d8a-8d48-4bbd-98bb-763be0d6fa1d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="47a7f5ac-bbae-4028-b84c-fe44a45a620c"/>
+				</reportElement>
+				<text><![CDATA[film_id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="280" height="30" uuid="9920ada3-40f4-406d-b0a5-e695c4bd55b6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="346ca9c4-8c68-4fa7-8cdb-038ae047fa43"/>
+				</reportElement>
+				<text><![CDATA[title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="0" width="174" height="30" uuid="cac65394-2675-4da6-a9b0-0d95ac74bee0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e7011597-915f-42ad-be58-39a6e2503b01"/>
+				</reportElement>
+				<text><![CDATA[category_name]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="30" uuid="0a118da6-ef12-4c8d-8a03-857f04c76857">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="47a7f5ac-bbae-4028-b84c-fe44a45a620c"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{film_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="280" height="30" uuid="fdd0cbfe-7aa2-4c45-8df9-7aae028adbe7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="346ca9c4-8c68-4fa7-8cdb-038ae047fa43"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="0" width="175" height="30" uuid="31728610-9d51-4ce7-acbc-0a3742222f98">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e7011597-915f-42ad-be58-39a6e2503b01"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{category_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
