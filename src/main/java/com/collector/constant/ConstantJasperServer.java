@@ -9,7 +9,7 @@ public class ConstantJasperServer {
 	public static final String SCHEME = "http";
 	public static final String HOST = "devs.local";
 	public static final int PORT = 8090;
-	public static final String USER_NAME = "jasperadmin";
+	public static final String USER_NAME = "singgih";
 	public static final String PASSWORD = "qwerty123ABC*#";
 
 	public static final String SERVER_HANDLE = "/jasperserver";
