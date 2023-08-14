@@ -1,6 +1,7 @@
 package com.collector.tool.jasperserver.sample;
 
-import com.collector.constant.ConstantJasperServer;
+import com.collector.config.ConfigProperties;
+import com.collector.model.JasperServer;
 import com.collector.utils.JasperRestUtils;
 import lombok.SneakyThrows;
 import org.apache.http.HttpResponse;
@@ -18,6 +19,8 @@ import java.util.List;
 
 public class GetCityInIdsTest {
 
+  private JasperServer jasperServer = ConfigProperties.getInstance().getJasperServer();
+
   @Test
   @SneakyThrows
   public void go(){
@@ -28,7 +31,7 @@ public class GetCityInIdsTest {
     params.add(new BasicNameValuePair("P_ID", "1,2,3,4,5"));
 
     HttpResponse httpRes = restUtils.sendRequest(
-        new HttpGet(), ConstantJasperServer.BASE_REPORT + resourceUri, params, true);
+        new HttpGet(), jasperServer.getBaseReport() + resourceUri, params, true);
 
     // Write binary content to output file
     InputStream is = httpRes.getEntity().getContent();

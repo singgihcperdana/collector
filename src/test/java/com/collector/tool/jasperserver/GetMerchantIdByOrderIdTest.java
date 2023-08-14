@@ -1,8 +1,9 @@
 package com.collector.tool.jasperserver;
 
-import com.collector.constant.ConstantJasperServer;
+import com.collector.config.ConfigProperties;
 import com.collector.enums.CollectorRoute;
 import com.collector.model.InsertCollectorsWebRequest;
+import com.collector.model.JasperServer;
 import com.collector.utils.CollectorUtils;
 import com.collector.utils.CommonsCollectionUtils;
 import com.collector.utils.JasperRestUtils;
@@ -31,6 +32,7 @@ public class GetMerchantIdByOrderIdTest {
   private final int PARTITION_SIZE_REQUEST_REST = 200;
   private final int PARTITION_SIZE_PAYLOAD = 1000;
   private final String FOLDER_CSV = "C:\\Users\\singgih.perdana\\Documents\\perbaikan data agustus 2023\\csv";
+  private JasperServer jasperServer = ConfigProperties.getInstance().getJasperServer();
 
   @Test
   @SneakyThrows
@@ -89,7 +91,7 @@ public class GetMerchantIdByOrderIdTest {
     params.add(new BasicNameValuePair("P_ORDER_IDS", param));
 
     HttpResponse httpResponse = restUtils.sendRequest(
-        new HttpGet(), ConstantJasperServer.BASE_REPORT + resourceUri, params, true);
+        new HttpGet(), jasperServer.getBaseReport() + resourceUri, params, true);
     return IOUtils.readLines(httpResponse.getEntity().getContent(), "UTF-8");
   }
 

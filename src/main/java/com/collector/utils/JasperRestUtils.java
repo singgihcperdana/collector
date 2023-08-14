@@ -1,5 +1,7 @@
 package com.collector.utils;
 
+import com.collector.config.ConfigProperties;
+import com.collector.model.JasperServer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,19 +32,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.collector.constant.ConstantJasperServer.BASE_REST_URL;
-import static com.collector.constant.ConstantJasperServer.BASE_REST_URL_V2;
-import static com.collector.constant.ConstantJasperServer.HOST;
-import static com.collector.constant.ConstantJasperServer.PARAMETER_USERNAME;
-import static com.collector.constant.ConstantJasperServer.PARAM_PASSWORD;
-import static com.collector.constant.ConstantJasperServer.PASSWORD;
-import static com.collector.constant.ConstantJasperServer.PORT;
 import static com.collector.constant.ConstantJasperServer.RESOURCE;
 import static com.collector.constant.ConstantJasperServer.RESOURCES_LOCAL_PATH;
 import static com.collector.constant.ConstantJasperServer.SAMPLE_FOLDER_RD;
-import static com.collector.constant.ConstantJasperServer.SCHEME;
-import static com.collector.constant.ConstantJasperServer.SERVICE_LOGIN;
-import static com.collector.constant.ConstantJasperServer.USER_NAME;
 
 public class JasperRestUtils {
 
@@ -50,10 +42,11 @@ public class JasperRestUtils {
   private	CookieStore cookieStore;
   private HttpContext httpContext;
 
-  protected HttpRequestBase httpReqCE;
+  protected HttpRequestBase httpRequestBase;
 
   protected HttpRequestBase tempHttpReq;
   protected HttpResponse httpResponse;
+  protected JasperServer jasperServer = ConfigProperties.getInstance().getJasperServer();
 
   private final Log log = LogFactory.getLog(getClass());
 
@@ -84,13 +77,13 @@ public class JasperRestUtils {
 
   public void loginToServer() {
     //building the request parameters
-    List<NameValuePair> ce_qparams = new ArrayList<NameValuePair>();
-    ce_qparams.add(new BasicNameValuePair(PARAMETER_USERNAME, USER_NAME));
-    ce_qparams.add(new BasicNameValuePair(PARAM_PASSWORD, PASSWORD));
+    List<NameValuePair> params = new ArrayList<>();
+    params.add(new BasicNameValuePair(jasperServer.getParameterUsername(), jasperServer.getUsername()));
+    params.add(new BasicNameValuePair(jasperServer.getParameterPassword(), jasperServer.getPassword()));
 
     try {
-      httpReqCE = new HttpPost();
-      httpResponse = sendRequest(httpReqCE, SERVICE_LOGIN, ce_qparams, true);
+      httpRequestBase = new HttpPost();
+      httpResponse = sendRequest(httpRequestBase, jasperServer.serviceLogin, params, true);
 
       //consuming the content to close the stream
       String loginResponse = IOUtils.toString(httpResponse.getEntity().getContent());
@@ -128,10 +121,11 @@ public class JasperRestUtils {
   public HttpResponse sendRequest(HttpRequestBase req, String service, List<NameValuePair> qparams,
       boolean isV2) throws Exception
   {
-    if(!isV2)
-      req.setURI(createURI(BASE_REST_URL+service, qparams));
+    if(isV2)
+      req.setURI(createURI(jasperServer.getBaseRestUrlV2()+service, qparams));
     else
-      req.setURI(createURI(BASE_REST_URL_V2+service, qparams));
+      req.setURI(createURI(jasperServer.getBaseRestUrl()+service, qparams));
+
 
     log.info("req method: "+req.getMethod());
 
@@ -140,12 +134,12 @@ public class JasperRestUtils {
     return httpResponse;
   }
 
-  private URI createURI(String path, List<NameValuePair> qparams) throws Exception{
+  private URI createURI(String path, List<NameValuePair> qParams) throws Exception{
     URI uri;
-    if (qparams!=null)
-      uri = URIUtils.createURI(SCHEME, HOST, PORT, path, URLEncodedUtils.format(qparams, "UTF-8"), null);
+    if (qParams!=null)
+      uri = URIUtils.createURI(jasperServer.getScheme(), jasperServer.getHost(), jasperServer.getPort(), path, URLEncodedUtils.format(qParams, "UTF-8"), null);
     else
-      uri = (new URL(SCHEME, HOST, PORT, path)).toURI();
+      uri = (new URL(jasperServer.getScheme(), jasperServer.getHost(), jasperServer.getPort(), path)).toURI();
 
     log.info("sending Request. url: " +uri.toString());
     return uri;

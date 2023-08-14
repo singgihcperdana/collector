@@ -1,6 +1,7 @@
 package com.collector.tool.jasperserver.sample;
 
-import com.collector.constant.ConstantJasperServer;
+import com.collector.config.ConfigProperties;
+import com.collector.model.JasperServer;
 import com.collector.utils.JasperRestUtils;
 import lombok.SneakyThrows;
 import org.apache.http.HttpResponse;
@@ -18,6 +19,8 @@ import java.util.List;
 
 public class GetCityInCategoriesTest {
 
+  private JasperServer jasperServer = ConfigProperties.getInstance().getJasperServer();
+
   @Test
   @SneakyThrows
   public void go(){
@@ -27,11 +30,11 @@ public class GetCityInCategoriesTest {
     List<NameValuePair> params = new ArrayList<>();
     params.add(new BasicNameValuePair("P_CATEGORIES", "Animation,Family"));
 
-    HttpResponse httpRes = restUtils.sendRequest(
-        new HttpGet(), ConstantJasperServer.BASE_REPORT + resourceUri, params, true);
+    HttpResponse httpResponse = restUtils.sendRequest(
+        new HttpGet(), jasperServer.getBaseReport() + resourceUri, params, true);
 
     // Write binary content to output file
-    InputStream is = httpRes.getEntity().getContent();
+    InputStream is = httpResponse.getEntity().getContent();
     byte[] buffer = new byte[8 * 1024];
     File file = new File("D:\\tmp\\report\\get_city_in_categories.csv");
     new File(file.getParent()).mkdirs();
