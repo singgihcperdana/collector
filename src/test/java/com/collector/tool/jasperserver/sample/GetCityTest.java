@@ -27,29 +27,10 @@ public class GetCityTest {
 	
 	@Test
 	public void test() throws Exception {
-
 		JasperRestUtils restUtils = new JasperRestUtils();
 		restUtils.loginToServer();
-		// GET request - download report by id from session
 		String resourceUri = "/Reports/Samples/get_city.csv";
-
-		HttpResponse httpResponse = restUtils.sendRequest(resourceUri, null);
-		
-		// Write binary content to output file
-		InputStream is = httpResponse.getEntity().getContent();
-		byte[] buffer = new byte[8 * 1024];
-		File file = new File("D:\\tmp\\report\\get_city.csv");
-		new File(file.getParent()).mkdirs();
-		OutputStream output = new FileOutputStream(file);
-		try {
-		    int bytesRead;
-		    while ((bytesRead = is.read(buffer)) != -1) {
-		      output.write(buffer, 0, bytesRead);
-		    }
-		  } finally {
-		    output.close();
-				is.close();
-		  }
+		restUtils.sendRequestAndSaveToFile(resourceUri, null, "D:\\tmp\\report\\get_city.csv");
 	}
 
 }

@@ -26,8 +26,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -125,6 +129,29 @@ public class JasperRestUtils {
     log.info("response status line: " + httpResponse.getStatusLine());
     return httpResponse;
   }
+
+  public void sendRequestAndSaveToFile(String report, List<NameValuePair> params, String toFile) throws Exception{
+    saveResponseToFile(sendRequest(report, params), toFile);
+  }
+
+  private void saveResponseToFile(HttpResponse response, String toFile) throws IOException {
+    // Write binary content to output file
+    InputStream is = response.getEntity().getContent();
+    byte[] buffer = new byte[8 * 1024];
+    File file = new File(toFile);
+    new File(file.getParent()).mkdirs();
+    OutputStream output = new FileOutputStream(file);
+    try {
+      int bytesRead;
+      while ((bytesRead = is.read(buffer)) != -1) {
+        output.write(buffer, 0, bytesRead);
+      }
+    } finally {
+      output.close();
+      is.close();
+    }
+  }
+
 
   // send a request to the CE server
   public HttpResponse sendRequest(HttpRequestBase req, String service, List<NameValuePair> qparams,

@@ -26,7 +26,7 @@ public class GetCityInCategoriesTest {
   public void go(){
     JasperRestUtils restUtils = new JasperRestUtils();
     restUtils.loginToServer();
-    final String resourceUri = "/Reports/Samples/get_city_in_categories.csv";
+    String resourceUri = "/Reports/Samples/get_city_in_categories.csv";
     List<NameValuePair> params = new ArrayList<>();
     params.add(new BasicNameValuePair("P_CATEGORIES", "Animation,Family"));
 
