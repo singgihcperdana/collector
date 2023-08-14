@@ -31,10 +31,9 @@ public class GetCityTest {
 		JasperRestUtils restUtils = new JasperRestUtils();
 		restUtils.loginToServer();
 		// GET request - download report by id from session
-		final String resourceUri = "/Reports/Samples/get_city.csv";
+		String resourceUri = "/Reports/Samples/get_city.csv";
 
-		HttpResponse httpResponse = restUtils.sendRequest(
-				new HttpGet(), jasperServer.getBaseReport() + resourceUri, null, true);
+		HttpResponse httpResponse = restUtils.sendRequest(resourceUri, null);
 		
 		// Write binary content to output file
 		InputStream is = httpResponse.getEntity().getContent();

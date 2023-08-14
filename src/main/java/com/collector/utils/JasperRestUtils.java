@@ -12,6 +12,7 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -114,6 +115,14 @@ public class JasperRestUtils {
   public HttpResponse sendAndAssert(HttpRequestBase req, String service, int expectedStatus) throws Exception{
     httpResponse = sendRequest(req, service, null, false);
 //    Assert.assertTrue("basic response check did not pass", isValidResposnse(expectedStatus));
+    return httpResponse;
+  }
+
+  public HttpResponse sendRequest(String report, List<NameValuePair> params) throws Exception{
+    HttpRequestBase request = new HttpGet();
+    request.setURI(createURI(jasperServer.getBaseRestUrlV2()+jasperServer.getBaseReport()+report, params));
+    httpResponse = httpClient.execute(request, httpContext);
+    log.info("response status line: " + httpResponse.getStatusLine());
     return httpResponse;
   }
 
